@@ -1,0 +1,13 @@
+{
+	"id": "Vieber_StockUsers",
+	"name": "Stock Users",
+	"icon": "",
+	"version": "1.1",
+	"admincp_route": "/admincp/build-stock-users",
+	"requires": {
+		"phpfox": ">= 4.0.4"
+	},
+	"credits": {
+		"RandomAPI": "https://randomuser.me/"
+	}
+}

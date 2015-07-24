@@ -1,0 +1,9 @@
+{% import '@Theme/macro/form.html' as Form %}
+<form method="post" class="ajax_post" action="{{ url('/admincp/build-stock-users') }}" data-add-spin="true">
+	{{ Form.text('total', _p('How many users would you like to create?'), 10) }}
+	{{ Form.text('password', _p('Would you like to create a password for each user?'), _p('Leave blank to create a random password.')) }}
+	{{ Form.submit('Start') }}
+	<div class="extra_info">
+		{{ _p('Note the depending on how many users you are creating and on your webserver, this can take a few minutes.') }}
+	</div>
+</form>
