@@ -20,6 +20,10 @@ new Core\Route('/admincp/build-stock-users', function(Core\Controller $controlle
 			$Db = new \Core\Db();
 			$ApiUser = new \Api\User();
 
+			if (!defined('PHPFOX_SKIP_MAIL')) {
+				define('PHPFOX_SKIP_MAIL', true);
+			}
+
 			foreach ($data->results as $user) {
 				$me = $user->user;
 
