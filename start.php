@@ -43,7 +43,7 @@ new Core\Route('/admincp/build-stock-users', function(Core\Controller $controlle
 					'birthday' => \User_Service_User::instance()->buildAge($day, $month, $year),
 					'birthday_search' => $me->dob,
 					'joined' => $me->registered,
-					'country_iso' => $me->nationality
+					// 'country_iso' => $me->nationality
 				], ['user_id' => $u->id]);
 
 				\User_Service_Process::instance()->uploadImage($u->id, true, $me->picture->large, true);
