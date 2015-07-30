@@ -3,7 +3,7 @@
     "name": "Stock Users",
     "vendor": "Vieber",
     "icon": "",
-    "version": 2.4,
+    "version": 2.5,
     "admincp_route": "\/admincp\/build-stock-users",
     "requires": {
         "phpfox": ">= 4.0.4"
