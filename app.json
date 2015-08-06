@@ -2,13 +2,15 @@
     "id": "Vieber_StockUsers",
     "name": "Stock Users",
     "vendor": "Vieber",
-    "icon": "",
-    "version": 2.5,
+    "icon": "\/\/d2h79mkp7etn4r.cloudfront.net\/icon\/2015\/08\/0075b99aadaf69401658bb5a29e945be.png",
+    "version": 2.6,
     "admincp_route": "\/admincp\/build-stock-users",
     "requires": {
         "phpfox": ">= 4.0.4"
     },
     "credits": {
-        "RandomAPI": "https:\/\/randomuser.me\/"
+        "RandomAPI": "https:\/\/randomuser.me\/",
+        "Freepik": "http:\/\/www.freepik.com",
+        "www.flaticon.com": "http:\/\/www.flaticon.com"
     }
 }
