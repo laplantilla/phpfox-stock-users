@@ -21,11 +21,15 @@ new Core\Route('/admincp/build-stock-users', function(Core\Controller $controlle
 			$response = file_get_contents('http://www.pexels.com/search/summer.js?page=1');
 			preg_match_all('/https:\/\/static\.pexels\.com\/photos\/([0-9]+)\/([a-zA-Z0-9-]+).jpg/i', $response, $matches);
 			define('PHPFOX_HTML5_PHOTO_UPLOAD', true);
+			define('PHPFOX_FILE_DONT_UNLINK', true);
 			foreach ($matches[0] as $url) {
 				$parts = explode('/', $url);
 				$name = ucwords(str_replace('-', ' ', explode('.', $parts[count($parts) - 1])[0]));
 				$path = $tmp . md5($url) . '.jpg';
 				file_put_contents($path, file_get_contents($url));
+				if (!file_exists($path)) {
+					continue;
+				}
 				register_shutdown_function(function () use ($path) {
 					if (file_exists($path)) {
 						unlink($path);
@@ -74,7 +78,7 @@ new Core\Route('/admincp/build-stock-users', function(Core\Controller $controlle
 
 				$ApiUser->assign([
 					'name' => ucwords($me->name->first) . ' ' . ucwords($me->name->last),
-					'email' => uniqid() . '.' . $me->email,
+					'email' => uniqid() . preg_replace("/[^a-zA-Z0-9@\.]+/", "", $me->email),
 					'password' => (empty($val['password']) ? uniqid() : $val['password'])
 				]);
 				$u = $ApiUser->post();
@@ -109,9 +113,11 @@ new Core\Route('/admincp/build-stock-users', function(Core\Controller $controlle
 					}
 					*/
 
-					$photo = $photos[rand(0, (count($photos) - 1))];
+					$iteration = rand(0, (count($photos) - 1));
+					$photo = $photos[$iteration];
 					$sHTML5TempFile = $photo['path'];
 					$fn = $photo['name'];
+					unset($_FILES['image']);
 					$_FILES['image'] = array(
 						'name' => array($fn),
 						'type' => array('image/jpeg'),
@@ -119,6 +125,11 @@ new Core\Route('/admincp/build-stock-users', function(Core\Controller $controlle
 						'error' => array(0),
 						'size' => array(filesize($sHTML5TempFile))
 					);
+
+					if (!file_exists($sHTML5TempFile)) {
+						d($photo);
+						exit('Cannot find file: ' . $sHTML5TempFile);
+					}
 
 					$oFile = \Phpfox_File::instance();
 					if ($aImage = $oFile->load('image[0]', array(
@@ -140,7 +151,7 @@ new Core\Route('/admincp/build-stock-users', function(Core\Controller $controlle
 						) {
 
 						} else {
-							throw new \Exception(implode('', \Phpfox_Error::get()));
+							throw new \Exception('Error(1): ' . implode('', \Phpfox_Error::get()));
 						}
 
 						// Get the current image width/height
@@ -161,7 +172,7 @@ new Core\Route('/admincp/build-stock-users', function(Core\Controller $controlle
 						foreach (Phpfox::getParam('photo.photo_pic_sizes') as $iSize) {
 							// Create the thumbnail
 							if ($oImage->createThumbnail(Phpfox::getParam('photo.dir_photo') . sprintf($sFileName, ''), Phpfox::getParam('photo.dir_photo') . sprintf($sFileName, '_' . $iSize), $iSize, $iSize, true, ((Phpfox::getParam('photo.enabled_watermark_on_photos') && Phpfox::getParam('core.watermark_option') != 'none') ? (Phpfox::getParam('core.watermark_option') == 'image' ? 'force_skip' : true) : false)) === false) {
-								throw new \Exception(implode('', \Phpfox_Error::get()));
+								throw new \Exception('Error(2): ' .implode('', \Phpfox_Error::get()));
 							}
 						}
 
